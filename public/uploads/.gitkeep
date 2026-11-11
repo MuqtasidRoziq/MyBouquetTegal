@@ -1,0 +1,3 @@
+# Ignore seluruh isi folder upload foto, kecuali file .gitkeep ini
+*
+!.gitkeep
