@@ -1,10 +1,14 @@
 name = "mybouquettegal"
+main = ".open-next/worker.js"
 compatibility_date = "2026-11-01"
 compatibility_flags = ["nodejs_compat"]
 
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
 # Binding Database Cloudflare D1
 [[d1_databases]]
-binding = "DB" # Nama variabel binding di kode Next.js
+binding = "DB"
 database_name = "mybouquettegal"
 database_id = "42096497-0b74-403f-b54c-6dbd496792bf"
-pages_build_output_dir = ".open-next/assets"
