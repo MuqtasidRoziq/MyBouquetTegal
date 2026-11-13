@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import { StoreInfo } from '@/types';
-import { Flower2, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Flower2, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminLayout({
@@ -11,6 +12,7 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
   const [store, setStore] = useState<StoreInfo | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -22,6 +24,12 @@ export default function AdminLayout({
       })
       .catch(() => {});
   }, []);
+
+  // Jika sedang di halaman login, tampilkan layar penuh tanpa sidebar / navbar admin
+  const isLoginPage = pathname === '/admin/login';
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-neutral-800 flex font-sans">
