@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://mybouquettegal.com/sitemap.xml
+Sitemap: https://mybouquettegal.biz.id/sitemap.xml
