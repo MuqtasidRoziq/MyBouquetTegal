@@ -52,14 +52,22 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Tentukan domain cookie jika di production
+    const host = request.headers.get('host') || '';
+    const isProduction = process.env.NODE_ENV === 'production' && !host.includes('localhost');
+    const cookieDomain = isProduction && host.endsWith('mybouquettegal.biz.id')
+      ? '.mybouquettegal.biz.id'
+      : undefined;
+
     // 4. Set ke HTTP-only cookie
     response.cookies.set({
       name: AUTH_COOKIE_NAME,
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProduction,
       sameSite: 'lax',
       path: '/',
+      domain: cookieDomain,
       maxAge: 60 * 60 * 24 * 7, // 7 hari
     });
 
