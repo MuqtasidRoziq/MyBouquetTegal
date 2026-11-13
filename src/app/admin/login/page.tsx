@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
             <Flower2 className="w-6 h-6" />
           </div>
           <h1 className="font-serif text-2xl font-bold text-neutral-900">
-            Login Admin Studio
+            Login Admin
           </h1>
           <p className="text-xs text-neutral-500">
             Akses dashboard manajemen katalog My Bouquet Tegal
