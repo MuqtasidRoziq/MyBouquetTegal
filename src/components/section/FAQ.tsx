@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import { FAQ as FAQType } from '@/types';
+import FadeIn from '@/components/ui/FadeIn';
 
 interface FAQProps {
   faqs?: FAQType[];
@@ -50,47 +51,49 @@ export default function FAQ({ faqs = [] }: FAQProps) {
   return (
     <section className="py-16 sm:py-20 bg-[#FAF9F5]" id="faq">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100/70 text-emerald-800 text-xs font-semibold uppercase tracking-wider mb-3">
-            <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Tanya Jawab</span>
+        <FadeIn direction="up">
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="flex items-center justify-center gap-2 mb-3 text-xs font-semibold tracking-[0.2em] uppercase text-emerald-800">
+              <span className="w-5 h-px bg-emerald-600/60" />
+              <span>Tanya Jawab</span>
+              <span className="w-5 h-px bg-emerald-600/60" />
+            </div>
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium text-neutral-900 tracking-normal">
+              Pertanyaan yang Sering Diajukan
+            </h2>
+            <p className="mt-3 text-neutral-600 text-sm sm:text-base font-light">
+              Informasi lengkap seputar pemesanan, kustomisasi, hingga pengiriman buket di Tegal &amp; Slawi.
+            </p>
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium text-neutral-900 tracking-normal">
-            Pertanyaan yang Sering Diajukan
-          </h2>
-          <p className="mt-3 text-neutral-600 text-sm sm:text-base font-light">
-            Informasi lengkap seputar pemesanan, kustomisasi, hingga pengiriman buket di Tegal & Slawi.
-          </p>
-        </div>
+        </FadeIn>
 
         <div className="space-y-3">
           {displayFaqs.map((faq, index) => {
             const isOpen = openIndex === index;
             return (
-              <div
-                key={faq.id}
-                className="bg-white rounded-2xl border border-neutral-200/70 overflow-hidden transition-all shadow-2xs"
-              >
-                <button
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full px-5 py-4 text-left flex items-center justify-between gap-4 hover:bg-neutral-50/50 transition cursor-pointer"
-                >
-                  <span className="font-medium text-neutral-900 text-sm sm:text-base">
-                    {faq.question}
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-emerald-700 shrink-0 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
+              <FadeIn key={faq.id} delay={index * 80} direction="up">
+                <div className="bg-white rounded-2xl border border-neutral-200/70 overflow-hidden transition-all shadow-2xs">
+                  <button
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="w-full px-5 py-4 text-left flex items-center justify-between gap-4 hover:bg-neutral-50/50 transition cursor-pointer"
+                  >
+                    <span className="font-medium text-neutral-900 text-sm sm:text-base">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-emerald-700 shrink-0 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
 
-                {isOpen && (
-                  <div className="px-5 pb-5 text-neutral-600 text-xs sm:text-sm leading-relaxed border-t border-neutral-100 pt-3 font-light">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
+                  {isOpen && (
+                    <div className="px-5 pb-5 text-neutral-600 text-xs sm:text-sm leading-relaxed border-t border-neutral-100 pt-3 font-light animate-in fade-in duration-200">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              </FadeIn>
             );
           })}
         </div>

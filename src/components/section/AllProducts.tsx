@@ -6,6 +6,7 @@ import { Product, Category, ProductType, StoreInfo, ContactInfo } from '@/types'
 import ProductCard from '@/components/ui/ProductCard';
 import CategoryFilter from '@/components/ui/CategoryFilter';
 import OrderModal from '@/components/ui/OrderModal';
+import ProductDetailModal from '@/components/ui/ProductDetailModal';
 import { Search, Sparkles, Filter, Layers, Flower2, Gift } from 'lucide-react';
 
 export default function AllProducts() {
@@ -35,7 +36,9 @@ export default function AllProducts() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedProductForOrder, setSelectedProductForOrder] = useState<Product | null>(null);
+  const [selectedProductForDetail, setSelectedProductForDetail] = useState<Product | null>(null);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState<boolean>(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -78,6 +81,15 @@ export default function AllProducts() {
     setIsOrderModalOpen(true);
   };
 
+  const handleOpenDetail = (product: Product) => {
+    setSelectedProductForDetail(product);
+    setIsDetailModalOpen(true);
+  };
+
+  const relatedProducts = selectedProductForDetail
+    ? products.filter((p) => p.id !== selectedProductForDetail.id)
+    : [];
+
   // Filter logika
   const filteredProducts = products.filter((item) => {
     if (selectedType !== 'all' && item.productType !== selectedType) {
@@ -90,8 +102,7 @@ export default function AllProducts() {
       const q = searchQuery.toLowerCase();
       const matchName = item.name.toLowerCase().includes(q);
       const matchDesc = item.description?.toLowerCase().includes(q) ?? false;
-      const matchBadge = item.badge?.toLowerCase().includes(q) ?? false;
-      return matchName || matchDesc || matchBadge;
+      return matchName || matchDesc;
     }
     return true;
   });
@@ -106,15 +117,16 @@ export default function AllProducts() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Title & Intro */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold tracking-wide uppercase mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Koleksi Terlengkap My Bouquet Tegal</span>
+          <div className="flex items-center justify-center gap-2 mb-3 text-xs font-semibold tracking-[0.2em] uppercase text-emerald-800">
+            <span className="w-5 h-px bg-emerald-600/60" />
+            <span>Koleksi Terlengkap</span>
+            <span className="w-5 h-px bg-emerald-600/60" />
           </div>
           <h1 className="font-serif text-3xl sm:text-5xl font-medium tracking-normal text-neutral-900 leading-tight">
             Temukan Kado Buket & Parcel Sempurna
           </h1>
           <p className="mt-3 text-sm sm:text-base text-neutral-600 font-light">
-            Jelajahi berbagai kreasi buket bunga segar, buket snack, uang, serta parcel hampers untuk segala momen spesial Anda.
+            Jelajahi berbagai kreasi buket wisuda, tunangan, snack, uang, serta parcel hampers untuk segala momen spesial Anda.
           </p>
         </div>
 
@@ -238,17 +250,30 @@ export default function AllProducts() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
             {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
                 onOrderClick={handleOpenOrder}
+                onDetailClick={handleOpenDetail}
               />
             ))}
           </div>
         )}
       </div>
+
+      {/* Modal Detail Produk */}
+      <ProductDetailModal
+        product={selectedProductForDetail}
+        store={store}
+        contact={contact}
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        onOrderClick={handleOpenOrder}
+        relatedProducts={relatedProducts}
+        onSelectRelated={(prod) => setSelectedProductForDetail(prod)}
+      />
 
       {/* Modal Pemesanan WA Cepat */}
       <OrderModal

@@ -45,11 +45,11 @@ export async function queryD1<T>(sql: string, params: unknown[] = []): Promise<T
 export async function getD1Products(productType?: ProductType): Promise<Product[] | null> {
   if (!isD1Configured) return null;
   try {
-    let sql = 'SELECT * FROM products';
+    let sql = 'SELECT * FROM products WHERE deleted_at IS NULL';
     const params: unknown[] = [];
 
     if (productType) {
-      sql += ' WHERE product_type = ?';
+      sql += ' AND product_type = ?';
       params.push(productType);
     }
     sql += ' ORDER BY created_at DESC';
@@ -59,14 +59,13 @@ export async function getD1Products(productType?: ProductType): Promise<Product[
       category_id: string;
       product_type: 'bucket' | 'parcel';
       name: string;
+      description: string;
       slug: string;
       price: number;
-      description: string;
       image_url: string;
-      badge: string | null;
-      status: 'ready' | 'preorder' | 'soldout';
-      is_featured: number;
       created_at: string;
+      updated_at?: string | null;
+      deleted_at?: string | null;
     }>(sql, params);
 
     return rows.map((r) => ({
@@ -74,14 +73,13 @@ export async function getD1Products(productType?: ProductType): Promise<Product[
       categoryId: r.category_id,
       productType: r.product_type,
       name: r.name,
+      description: r.description,
       slug: r.slug,
       price: r.price,
-      description: r.description,
       imageUrl: r.image_url,
-      badge: r.badge || undefined,
-      status: r.status,
-      isFeatured: Boolean(r.is_featured),
       createdAt: r.created_at,
+      updatedAt: r.updated_at || null,
+      deletedAt: r.deleted_at || null,
     }));
   } catch (err) {
     console.error('D1 Query products failed:', err);
@@ -93,21 +91,20 @@ export async function insertD1Product(product: Product): Promise<boolean> {
   if (!isD1Configured) return false;
   try {
     await queryD1(
-      `INSERT INTO products (id, category_id, product_type, name, slug, price, description, image_url, badge, status, is_featured, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO products (id, category_id, product_type, name, description, slug, price, image_url, created_at, updated_at, deleted_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         product.id,
         product.categoryId,
         product.productType,
         product.name,
+        product.description,
         product.slug,
         product.price,
-        product.description,
         product.imageUrl,
-        product.badge || null,
-        product.status,
-        product.isFeatured ? 1 : 0,
-        product.createdAt,
+        product.createdAt || new Date().toISOString(),
+        product.updatedAt || null,
+        product.deletedAt || null,
       ]
     );
     return true;
@@ -125,23 +122,21 @@ export async function updateD1Product(product: Product): Promise<boolean> {
         category_id = ?, 
         product_type = ?,
         name = ?, 
-        price = ?, 
         description = ?, 
+        slug = ?, 
+        price = ?, 
         image_url = ?, 
-        badge = ?, 
-        status = ?, 
-        is_featured = ?
+        updated_at = ?
        WHERE id = ?`,
       [
         product.categoryId,
         product.productType,
         product.name,
-        product.price,
         product.description,
+        product.slug,
+        product.price,
         product.imageUrl,
-        product.badge || null,
-        product.status,
-        product.isFeatured ? 1 : 0,
+        new Date().toISOString(),
         product.id,
       ]
     );
@@ -155,7 +150,10 @@ export async function updateD1Product(product: Product): Promise<boolean> {
 export async function deleteD1Product(id: string): Promise<boolean> {
   if (!isD1Configured) return false;
   try {
-    await queryD1('DELETE FROM products WHERE id = ?', [id]);
+    await queryD1(
+      `UPDATE products SET deleted_at = ? WHERE id = ?`,
+      [new Date().toISOString(), id]
+    );
     return true;
   } catch (err) {
     console.error('Delete D1 Product failed:', err);

@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { name, categoryId, productType, price, description, imageUrl, badge, status, isFeatured } = body;
+    const { name, categoryId, productType, price, description, imageUrl } = body;
 
     if (!name || !categoryId || !price) {
       return NextResponse.json(
@@ -62,10 +62,9 @@ export async function POST(request: NextRequest) {
       price: Number(price),
       description: description || '',
       imageUrl: imageUrl || 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=800&q=80',
-      badge: badge || undefined,
-      status: status || 'ready',
-      isFeatured: Boolean(isFeatured),
       createdAt: new Date().toISOString(),
+      updatedAt: null,
+      deletedAt: null,
     };
 
     const { addSingleProduct } = await import('@/lib/storage');

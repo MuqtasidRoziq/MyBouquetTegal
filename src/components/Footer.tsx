@@ -34,7 +34,7 @@ export default function Footer({ store, contact }: FooterProps) {
             </Link>
 
             <p className="text-sm text-neutral-400 leading-relaxed">
-              Artisan florist & gift studio di Tegal & Slawi. Menghadirkan rangkaian buket bunga segar, uang, boneka wisuda, snack, dan hampers parcel hari raya dengan sentuhan estetika tinggi.
+              Studio buket &amp; hampers artisan di Tegal &amp; Slawi. Melayani pesanan buket wisuda, tunangan/lamaran, buket uang, boneka, snack, serta hampers parcel lebaran &amp; hari raya dengan hasil rapi dan estetik.
             </p>
 
             <div className="pt-2 text-xs text-neutral-400 flex items-center gap-2">

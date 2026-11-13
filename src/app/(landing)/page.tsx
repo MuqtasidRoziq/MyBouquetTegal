@@ -19,8 +19,52 @@ export default async function HomePage() {
     getFAQs(),
   ]);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Florist',
+    name: store.name || 'My Bouquet Tegal',
+    image: 'https://mybouquettegal.com/logo_bucket.webp',
+    telephone: contact.whatsappNumber ? `+${contact.whatsappNumber}` : '+6285742880000',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Tegal',
+      addressRegion: 'Jawa Tengah',
+      addressCountry: 'ID',
+      streetAddress: contact.address || 'Slawi, Kab. Tegal',
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: -6.9839,
+      longitude: 109.1396,
+    },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday',
+        ],
+        opens: '08:00',
+        closes: '20:00',
+      },
+    ],
+    priceRange: 'Rp 25.000 - Rp 500.000+',
+    url: 'https://mybouquettegal.com',
+  };
+
   return (
     <>
+      {/* Schema.org Structured Data for Local Business SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* 1. Hero Banner */}
       <Hero store={store} contact={contact} />
 

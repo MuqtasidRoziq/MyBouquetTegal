@@ -157,12 +157,12 @@ export default function ImageUpload({
       />
 
       {value ? (
-        <div className="relative group w-full aspect-video sm:aspect-[16/9] max-h-56 rounded-2xl overflow-hidden border border-neutral-200 bg-neutral-50 flex items-center justify-center">
+        <div className="relative group w-full rounded-2xl overflow-hidden border border-neutral-200 bg-neutral-900/5 flex items-center justify-center p-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={value}
-            alt="Preview File Fisik"
-            className="w-full h-full object-cover object-center"
+            alt="Preview Gambar"
+            className="w-auto h-auto max-w-full max-h-[360px] object-contain rounded-xl shadow-xs"
           />
 
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">

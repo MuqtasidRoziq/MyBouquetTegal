@@ -26,9 +26,17 @@ export async function PUT(
     const current = products[index];
     const updatedProduct = {
       ...current,
-      ...body,
+      name: body.name ?? current.name,
+      categoryId: body.categoryId ?? current.categoryId,
+      productType: body.productType ?? current.productType,
+      description: body.description !== undefined ? body.description : current.description,
+      imageUrl: body.imageUrl ?? current.imageUrl,
       price: body.price !== undefined ? Number(body.price) : current.price,
+      slug: body.name
+        ? body.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        : current.slug,
       id: current.id,
+      updatedAt: new Date().toISOString(),
     };
 
     await updateSingleProduct(updatedProduct);

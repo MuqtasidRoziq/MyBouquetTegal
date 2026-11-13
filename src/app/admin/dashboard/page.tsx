@@ -12,6 +12,8 @@ import {
   ExternalLink,
   Store,
   Phone,
+  PlusCircle,
+  TrendingUp,
 } from 'lucide-react';
 import { Product, Category, Testimonial, FAQ, StoreInfo } from '@/types';
 
@@ -60,139 +62,227 @@ export default function DashboardOverviewPage() {
     loadStats();
   }, []);
 
-  const stats = [
+  // 6 Modul Dashboard - Ditampilkan 2 kolom di HP dan 3-4 kolom di desktop
+  const menuModules = [
     {
-      title: 'Total Produk',
-      value: products.length,
-      desc: 'Buket & Parcel terdaftar',
-      icon: <Package className="w-5 h-5 text-emerald-700" />,
+      title: 'Katalog Produk',
+      badge: 'Produk',
+      count: products.length,
+      unit: 'Item',
+      desc: 'Buket bunga, uang, snack & parcel',
+      icon: Package,
       href: '/admin/products',
-      bg: 'bg-emerald-50 border-emerald-200/70',
+      btnLabel: 'Buka Produk',
+      colorTheme: 'emerald',
+      actionHref: '/admin/products',
     },
     {
       title: 'Kategori Produk',
-      value: categories.length,
-      desc: 'Kelompok buket & parcel',
-      icon: <Layers className="w-5 h-5 text-teal-700" />,
+      badge: 'Kategori',
+      count: categories.length,
+      unit: 'Kategori',
+      desc: 'Kelompok buket wisuda & event',
+      icon: Layers,
       href: '/admin/categories',
-      bg: 'bg-teal-50 border-teal-200/70',
+      btnLabel: 'Buka Kategori',
+      colorTheme: 'teal',
+      actionHref: '/admin/categories',
     },
     {
-      title: 'Testimoni Pembeli',
-      value: testimonials.length,
-      desc: 'Ulasan & rating bintang',
-      icon: <MessageSquareQuote className="w-5 h-5 text-amber-700" />,
+      title: 'Ulasan & Testimoni',
+      badge: 'Testimoni',
+      count: testimonials.length,
+      unit: 'Ulasan',
+      desc: 'Rating kepuasan & cerita pelanggan',
+      icon: MessageSquareQuote,
       href: '/admin/testimoni',
-      bg: 'bg-amber-50 border-amber-200/70',
+      btnLabel: 'Buka Testimoni',
+      colorTheme: 'amber',
+      actionHref: '/admin/testimoni',
     },
     {
       title: 'Tanya Jawab FAQ',
-      value: faqs.length,
-      desc: 'Informasi aktif di website',
-      icon: <HelpCircle className="w-5 h-5 text-indigo-700" />,
+      badge: 'Bantuan',
+      count: faqs.length,
+      unit: 'Pertanyaan',
+      desc: 'Pertanyaan umum seputar order',
+      icon: HelpCircle,
       href: '/admin/faq',
-      bg: 'bg-indigo-50 border-indigo-200/70',
+      btnLabel: 'Buka FAQ',
+      colorTheme: 'indigo',
+      actionHref: '/admin/faq',
+    },
+    {
+      title: 'Kontak & Peta Maps',
+      badge: 'Lokasi & CS',
+      count: 'Aktif',
+      unit: 'WhatsApp & Maps',
+      desc: 'No WA fast-response & koordinat GPS',
+      icon: Phone,
+      href: '/admin/contact',
+      btnLabel: 'Buka Kontak',
+      colorTheme: 'blue',
+      actionHref: '/admin/contact',
+    },
+    {
+      title: 'Profil & Identitas',
+      badge: 'Brand Toko',
+      count: 'Aktif',
+      unit: 'Logo & Slogan',
+      desc: 'Nama studio, logo, dan identitas toko',
+      icon: Store,
+      href: '/admin/profile',
+      btnLabel: 'Buka Profil',
+      colorTheme: 'rose',
+      actionHref: '/admin/profile',
     },
   ];
 
+  const getColorClasses = (color: string) => {
+    switch (color) {
+      case 'emerald':
+        return {
+          bg: 'bg-emerald-500/10 text-emerald-800',
+          border: 'border-emerald-200/80 hover:border-emerald-400',
+          badge: 'bg-emerald-100/80 text-emerald-800',
+          btn: 'bg-emerald-800 hover:bg-emerald-900 text-white',
+        };
+      case 'teal':
+        return {
+          bg: 'bg-teal-500/10 text-teal-800',
+          border: 'border-teal-200/80 hover:border-teal-400',
+          badge: 'bg-teal-100/80 text-teal-800',
+          btn: 'bg-teal-800 hover:bg-teal-900 text-white',
+        };
+      case 'amber':
+        return {
+          bg: 'bg-amber-500/10 text-amber-800',
+          border: 'border-amber-200/80 hover:border-amber-400',
+          badge: 'bg-amber-100/80 text-amber-800',
+          btn: 'bg-amber-800 hover:bg-amber-900 text-white',
+        };
+      case 'indigo':
+        return {
+          bg: 'bg-indigo-500/10 text-indigo-800',
+          border: 'border-indigo-200/80 hover:border-indigo-400',
+          badge: 'bg-indigo-100/80 text-indigo-800',
+          btn: 'bg-indigo-800 hover:bg-indigo-900 text-white',
+        };
+      case 'blue':
+        return {
+          bg: 'bg-blue-500/10 text-blue-800',
+          border: 'border-blue-200/80 hover:border-blue-400',
+          badge: 'bg-blue-100/80 text-blue-800',
+          btn: 'bg-blue-800 hover:bg-blue-900 text-white',
+        };
+      case 'rose':
+      default:
+        return {
+          bg: 'bg-rose-500/10 text-rose-800',
+          border: 'border-rose-200/80 hover:border-rose-400',
+          badge: 'bg-rose-100/80 text-rose-800',
+          btn: 'bg-rose-800 hover:bg-rose-900 text-white',
+        };
+    }
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-emerald-900 to-teal-900 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-sm">
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-emerald-500/10 rounded-l-full blur-2xl pointer-events-none" />
-        <div className="relative z-10 space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700/60 text-emerald-200 text-xs font-semibold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Selamat Datang di Studio Panel</span>
+      <div className="bg-gradient-to-r from-emerald-900 via-emerald-800 to-teal-900 rounded-3xl p-5 sm:p-7 text-white relative overflow-hidden shadow-sm">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold uppercase tracking-wider backdrop-blur-xs">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Studio Florist Command Center</span>
+            </div>
+            <h1 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold tracking-tight">
+              {store?.name || 'My Bouquet Tegal'}
+            </h1>
+            <p className="text-emerald-100/90 text-xs sm:text-sm max-w-xl font-light">
+              Kelola seluruh konten, foto buket, ulasan testimoni, dan konfigurasi toko langsung dari perangkat Anda.
+            </p>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight">
-            Dashboard {store?.name || 'My Bouquet Tegal'}
-          </h1>
-          <p className="text-emerald-100/90 text-xs sm:text-sm max-w-xl font-light">
-            Kelola katalog buket, foto produk, kategori, testimoni pembeli, serta informasi kontak toko Anda dari satu tempat.
+
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Link
+              href="/"
+              target="_blank"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold backdrop-blur-xs border border-white/20 transition active:scale-95"
+            >
+              <span>Lihat Website</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Header Bagian Kartu Modul */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-serif font-bold text-lg sm:text-xl text-neutral-900">
+            Menu &amp; Modul Pengelolaan
+          </h2>
+          <p className="text-xs text-neutral-500">
+            Akses langsung ke semua fitur pengelolaan toko
           </p>
         </div>
       </div>
 
-      {/* Grid Statistik */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {stats.map((s, idx) => (
-          <Link
-            key={idx}
-            href={s.href}
-            className={`p-6 rounded-2xl border ${s.bg} hover:shadow-md transition-all group flex flex-col justify-between`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase text-neutral-600 tracking-wider">
-                {s.title}
-              </span>
-              <div className="p-2 rounded-xl bg-white shadow-2xs group-hover:scale-110 transition-transform">
-                {s.icon}
+      {/* Grid 2 Kolom di Handphone (grid-cols-2) dan 3 Kolom di Layar Lebar */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
+        {menuModules.map((m, idx) => {
+          const Icon = m.icon;
+          const styles = getColorClasses(m.colorTheme);
+
+          return (
+            <div
+              key={idx}
+              className={`bg-white rounded-2xl sm:rounded-3xl border ${styles.border} p-4 sm:p-5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between group`}
+            >
+              <div>
+                {/* Header Card: Icon & Badge */}
+                <div className="flex items-center justify-between gap-1 mb-3">
+                  <div className={`p-2 sm:p-2.5 rounded-xl ${styles.bg}`}>
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </div>
+                  <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${styles.badge} truncate`}>
+                    {m.badge}
+                  </span>
+                </div>
+
+                {/* Counter / Value */}
+                <div className="my-2 sm:my-3">
+                  <div className="text-xl sm:text-3xl font-serif font-bold text-neutral-900 leading-none">
+                    {loading ? '...' : m.count}
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-neutral-400 mt-1 font-medium truncate">
+                    {m.unit}
+                  </p>
+                </div>
+
+                {/* Title & Desc */}
+                <h3 className="font-semibold text-neutral-900 text-xs sm:text-base leading-snug truncate">
+                  {m.title}
+                </h3>
+                <p className="hidden sm:block text-xs text-neutral-500 mt-1 font-light line-clamp-2">
+                  {m.desc}
+                </p>
+              </div>
+
+              {/* Action Button: Jelas & Langsung Buka Modul */}
+              <div className="mt-4 pt-3 border-t border-neutral-100">
+                <Link
+                  href={m.href}
+                  className={`w-full inline-flex items-center justify-center gap-1 sm:gap-1.5 py-2 px-3 rounded-xl ${styles.btn} text-[11px] sm:text-xs font-semibold shadow-2xs active:scale-95 transition-all`}
+                >
+                  <span>{m.btnLabel}</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
               </div>
             </div>
-            <div className="mt-4">
-              <div className="text-3xl font-serif font-bold text-neutral-900">
-                {loading ? '...' : s.value}
-              </div>
-              <p className="text-xs text-neutral-500 mt-1">{s.desc}</p>
-            </div>
-            <div className="mt-4 pt-3 border-t border-neutral-200/50 flex items-center justify-between text-xs font-semibold text-neutral-700 group-hover:text-emerald-800">
-              <span>Buka Modul</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      {/* Quick Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 bg-white rounded-3xl border border-neutral-200/80 shadow-2xs space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-emerald-50 text-emerald-800">
-              <Store className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-serif font-bold text-base text-neutral-900">
-                Profil & Logo Brand
-              </h3>
-              <p className="text-xs text-neutral-500">Ubah nama studio, logo header, dan slogan</p>
-            </div>
-          </div>
-          <p className="text-xs text-neutral-600 leading-relaxed font-light">
-            Pastikan logo toko Anda selalu tampil jernih di navbar pengunjung dan footer website.
-          </p>
-          <Link
-            href="/admin/profile"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 hover:underline"
-          >
-            <span>Pengaturan Profil Toko</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        <div className="p-6 bg-white rounded-3xl border border-neutral-200/80 shadow-2xs space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-teal-50 text-teal-800">
-              <Phone className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-serif font-bold text-base text-neutral-900">
-                Kontak, WhatsApp & Maps
-              </h3>
-              <p className="text-xs text-neutral-500">Nomor pemesanan dan titik jemput workshop</p>
-            </div>
-          </div>
-          <p className="text-xs text-neutral-600 leading-relaxed font-light">
-            Pengunjung langsung diarahkan ke nomor WhatsApp ini saat menekan tombol pesan pada buket pilihan.
-          </p>
-          <Link
-            href="/admin/contact"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-800 hover:underline"
-          >
-            <span>Pengaturan Kontak & Peta</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

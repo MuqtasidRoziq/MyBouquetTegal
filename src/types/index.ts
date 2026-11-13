@@ -6,23 +6,23 @@ export interface Category {
   slug: string;
   productType: ProductType;
   description?: string;
+  createdAt?: string;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
 }
-
-export type ProductStatus = 'ready' | 'preorder' | 'soldout';
 
 export interface Product {
   id: string;
   categoryId: string;
   productType: ProductType;
   name: string;
+  description: string;
   slug: string;
   price: number;
-  description: string;
   imageUrl: string;
-  badge?: string;
-  status: ProductStatus;
-  isFeatured?: boolean;
   createdAt: string;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
 }
 
 export interface StoreInfo {
@@ -30,6 +30,9 @@ export interface StoreInfo {
   name: string;
   tagline: string;
   logoUrl: string;
+  createdAt?: string;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
 }
 
 export interface ContactInfo {
@@ -41,6 +44,9 @@ export interface ContactInfo {
   address: string;
   googleMapsFrameUrl: string;
   operationalHours: string;
+  createdAt?: string;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
 }
 
 export interface Testimonial {
@@ -50,6 +56,9 @@ export interface Testimonial {
   rating: number;
   comment: string;
   dateText?: string;
+  createdAt?: string;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
 }
 
 export interface FAQ {
@@ -58,6 +67,9 @@ export interface FAQ {
   answer: string;
   category?: string;
   sortOrder?: number;
+  createdAt?: string;
+  updatedAt?: string | null;
+  deletedAt?: string | null;
 }
 
 export interface UserSession {

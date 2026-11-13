@@ -181,17 +181,36 @@ export default function AdminContactPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <MapPin className="w-4 h-4 text-emerald-700" />
-              <span>Frame URL Google Maps (Embed src)</span>
+            <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <MapPin className="w-4 h-4 text-emerald-700" />
+                <span>Google Maps Embed (URL atau Tag &lt;iframe&gt;)</span>
+              </span>
+              <span className="text-[11px] text-neutral-400 font-normal lowercase">
+                bisa paste seluruh tag iframe atau url src
+              </span>
             </label>
             <textarea
-              rows={2}
-              placeholder="https://www.google.com/maps/embed?pb=..."
+              rows={5}
+              placeholder='Tempelkan URL https://www.google.com/maps/embed?... atau seluruh kode HTML <iframe src="..."></iframe>'
               value={form.googleMapsFrameUrl}
-              onChange={(e) => setForm({ ...form, googleMapsFrameUrl: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-hidden text-xs font-mono resize-none"
+              onChange={(e) => {
+                const val = e.target.value;
+                // Otomatis ekstrak URL jika yang di-paste adalah tag <iframe src="...">
+                const match = val.match(/src=["'](https?:\/\/[^"']+)["']/i);
+                if (match && match[1]) {
+                  setForm({ ...form, googleMapsFrameUrl: match[1] });
+                } else {
+                  setForm({ ...form, googleMapsFrameUrl: val });
+                }
+              }}
+              className="w-full p-3.5 rounded-xl border border-neutral-200 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 outline-hidden text-xs font-mono leading-relaxed"
             />
+            {form.googleMapsFrameUrl && (
+              <p className="mt-1.5 text-[11px] text-emerald-700 truncate">
+                Preview URL: {form.googleMapsFrameUrl.startsWith('http') ? form.googleMapsFrameUrl : 'URL diekstrak otomatis'}
+              </p>
+            )}
           </div>
 
           <button
