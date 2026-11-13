@@ -26,7 +26,8 @@ export default function AdminLayout({
   }, []);
 
   // Jika sedang di halaman login, tampilkan layar penuh tanpa sidebar / navbar admin
-  const isLoginPage = pathname === '/admin/login';
+  // Mendukung baik /admin/login (direct) maupun /login (rewrite via admin subdomain)
+  const isLoginPage = pathname === '/admin/login' || pathname === '/login' || pathname.endsWith('/login');
   if (isLoginPage) {
     return <>{children}</>;
   }

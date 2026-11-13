@@ -16,7 +16,12 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: 'swap',
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mybouquettegal.com';
+// Prioritaskan domain live produksi mybouquettegal.biz.id agar canonical dan OpenGraph tidak tertimpa localhost saat build
+const baseUrl =
+  process.env.NEXT_PUBLIC_APP_URL &&
+  !process.env.NEXT_PUBLIC_APP_URL.includes('localhost')
+    ? process.env.NEXT_PUBLIC_APP_URL
+    : 'https://mybouquettegal.biz.id';
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
