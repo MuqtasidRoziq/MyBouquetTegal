@@ -151,11 +151,6 @@ export default function Footer({ store, contact }: FooterProps) {
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 gap-4">
           <p>© 2026 {store.name}. Seluruh Hak Cipta Dilindungi.</p>
-          <div className="flex items-center gap-6">
-            <Link href="/admin/login" className="hover:text-neutral-400 transition">
-              Portal Admin
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

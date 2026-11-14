@@ -424,3 +424,66 @@ export async function getD1User(username: string): Promise<StoredUser | null> {
     return null;
   }
 }
+
+// ---------------- UPLOADED IMAGES ----------------
+export interface StoredImage {
+  id: string;
+  filename: string;
+  folder: string;
+  mimeType: string;
+  dataBase64: string;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export async function saveD1Image(image: {
+  id: string;
+  filename: string;
+  folder: string;
+  mimeType: string;
+  dataBase64: string;
+  sizeBytes: number;
+}): Promise<boolean> {
+  if (!isD1Configured) return false;
+  try {
+    const now = new Date().toISOString();
+    await queryD1(
+      `INSERT INTO uploaded_images (id, filename, folder, mime_type, data_base64, size_bytes, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [image.id, image.filename, image.folder, image.mimeType, image.dataBase64, image.sizeBytes, now]
+    );
+    return true;
+  } catch (err) {
+    console.error('Save D1 image failed:', err);
+    return false;
+  }
+}
+
+export async function getD1Image(id: string): Promise<StoredImage | null> {
+  if (!isD1Configured) return null;
+  try {
+    const rows = await queryD1<{
+      id: string;
+      filename: string;
+      folder: string;
+      mime_type: string;
+      data_base64: string;
+      size_bytes: number;
+      created_at: string;
+    }>('SELECT * FROM uploaded_images WHERE id = ? LIMIT 1', [id]);
+
+    if (rows.length === 0) return null;
+    return {
+      id: rows[0].id,
+      filename: rows[0].filename,
+      folder: rows[0].folder,
+      mimeType: rows[0].mime_type,
+      dataBase64: rows[0].data_base64,
+      sizeBytes: rows[0].size_bytes,
+      createdAt: rows[0].created_at,
+    };
+  } catch (err) {
+    console.error('Get D1 image failed:', err);
+    return null;
+  }
+}

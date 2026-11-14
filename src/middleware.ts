@@ -58,19 +58,10 @@ export async function middleware(request: NextRequest) {
   // =========================================================================
   // 2. JIKA DIAKSES DARI DOMAIN UTAMA (mybouquettegal.biz.id / localhost)
   // =========================================================================
-  // Jika ada request yang membuka /admin di domain utama, alihkan ke subdomain admin
+  // Jika ada request yang membuka path /admin di domain utama, sembunyikan rute ini
+  // dengan me-rewrite ke halaman not-found (404) agar tidak bisa diakses dari domain utama.
   if (pathname.startsWith('/admin')) {
-    // Ambil path setelah /admin (misal /admin/products -> /products, /admin/login -> /login, /admin -> /)
-    const subPath = pathname.replace(/^\/admin/, '') || '/';
-
-    // Jika di lokal (localhost), redirect ke admin.localhost
-    const port = host.split(':')[1] ? `:${host.split(':')[1]}` : '';
-    const adminHost = hostname === 'localhost' || hostname.endsWith('.localhost')
-      ? `admin.localhost${port}`
-      : `admin.${hostname}${port}`;
-
-    const protocol = request.nextUrl.protocol || 'http:';
-    return NextResponse.redirect(new URL(`${protocol}//${adminHost}${subPath}`));
+    return NextResponse.rewrite(new URL('/not-found', request.url));
   }
 
   return NextResponse.next();

@@ -80,3 +80,13 @@ CREATE TABLE IF NOT EXISTS faqs (
   updated_at TEXT,
   deleted_at TEXT
 );
+
+CREATE TABLE IF NOT EXISTS uploaded_images (
+  id TEXT PRIMARY KEY,
+  filename TEXT NOT NULL,
+  folder TEXT NOT NULL,
+  mime_type TEXT NOT NULL,
+  data_base64 TEXT NOT NULL,
+  size_bytes INTEGER NOT NULL,
+  created_at TEXT NOT NULL
+);
