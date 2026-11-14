@@ -160,7 +160,7 @@ export default function Sidebar({
         {/* Footer Actions */}
         <div className="p-4 border-t border-neutral-100 space-y-2 bg-neutral-50/50">
           <Link
-            href="/"
+            href="https://mybouquettegal.biz.id"
             target="_blank"
             className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-neutral-700 bg-white hover:bg-neutral-100 border border-neutral-200/80 shadow-2xs transition"
           >
@@ -317,7 +317,7 @@ export default function Sidebar({
 
             <div className="pt-3 border-t border-neutral-100 space-y-2">
               <Link
-                href="/"
+                href="https://mybouquettegal.biz.id"
                 target="_blank"
                 onClick={onCloseMobileMenu}
                 className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-neutral-700 bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 transition"
